@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\IncidentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,7 +26,18 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');    
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    Route::get('incidents/search-car-part', [IncidentController::class, 'searchCarPartIndex'])->name('incidents.searchCarPartIndex');
+    Route::get('incidents/search-car-part/{incident}', [IncidentController::class, 'searchCarPartView'])->name('incidents.searchCarPartView');    
+
+    Route::resource('incidents', IncidentController::class);
+    Route::get('incidents/diagnose/{incident}', [IncidentController::class, 'diagnoseView'])->name('incidents.diagnose');    
+    Route::post('incidents/diagnose/complete/{incident}', [IncidentController::class, 'completeDiagnose'])->name('incidents.completeDiagnose');
+
+    
+    
 });
 
 require __DIR__.'/auth.php';

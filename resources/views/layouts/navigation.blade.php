@@ -13,9 +13,32 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Inicio') }}
                     </x-nav-link>
                 </div>
+
+                @if (!is_null(Auth::user()->insurer_id))
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('incidents.index')" :active="request()->routeIs('incidents')">
+                            {{ __('Incidentes') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+
+                @if (is_null(Auth::user()->insurer_id))
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('incidents.index')" :active="request()->routeIs('incidents')">
+                            {{ __('Incidentes por diagnosticar') }}
+                        </x-nav-link>
+                    </div>
+
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('incidents.searchCarPartIndex')" :active="request()->routeIs('incidents')">
+                            {{ __('Buscar repuestos') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+                
             </div>
 
             <!-- Settings Dropdown -->

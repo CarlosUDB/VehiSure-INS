@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             WorkshopSeeder::class,
             ProviderSeeder::class,
             CarPartSeeder::class,
-            //UserSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }
