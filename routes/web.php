@@ -3,7 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IncidentController;
 use Illuminate\Support\Facades\Route;
-
+use App\Models\User;
+use App\Models\Incident;
+use App\Models\Workshop;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,24 +22,27 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $userCount = User::count();
+    $workCount = Workshop::count();
+    $incidentCount = Incident::count();
+    return view('dashboard', compact('userCount', 'workCount', 'incidentCount'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');    
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 
     Route::get('incidents/search-car-part', [IncidentController::class, 'searchCarPartIndex'])->name('incidents.searchCarPartIndex');
-    Route::get('incidents/search-car-part/{incident}', [IncidentController::class, 'searchCarPartView'])->name('incidents.searchCarPartView');    
+    Route::get('incidents/search-car-part/{incident}', [IncidentController::class, 'searchCarPartView'])->name('incidents.searchCarPartView');
 
     Route::resource('incidents', IncidentController::class);
-    Route::get('incidents/diagnose/{incident}', [IncidentController::class, 'diagnoseView'])->name('incidents.diagnose');    
+    Route::get('incidents/diagnose/{incident}', [IncidentController::class, 'diagnoseView'])->name('incidents.diagnose');
     Route::post('incidents/diagnose/complete/{incident}', [IncidentController::class, 'completeDiagnose'])->name('incidents.completeDiagnose');
 
-    
-    
+
+
 });
 
 require __DIR__.'/auth.php';
