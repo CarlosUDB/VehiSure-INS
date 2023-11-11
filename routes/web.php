@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('autocomplete', [IncidentController::class, 'autocomplete'])->name('autocomplete');
 
     Route::get('incidents/search-car-part', [IncidentController::class, 'searchCarPartIndex'])->name('incidents.searchCarPartIndex');
     Route::get('incidents/search-car-part/{incident}', [IncidentController::class, 'searchCarPartView'])->name('incidents.searchCarPartView');

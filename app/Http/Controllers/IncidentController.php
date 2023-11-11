@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Incident;
 use App\Models\Workshop;
+use App\Models\CarPart;
+use App\Models\Requisition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 
 class IncidentController extends Controller
 {
@@ -78,6 +81,18 @@ class IncidentController extends Controller
             'status' => 'getting_part'
         ]);
 
+        $request->validate([
+            'incident_id' => 'required',
+            'car_part_id' => 'required',
+            'quantity' => 'required',
+        ]);
+
+        $requisition = Requisition::create([
+            'incident_id' => $request->incident_id,
+            'car_part_id' => $request->car_part_id,
+            'quantity' => $request->quantity
+        ]);
+
         return redirect()->route('incidents.index')->with('completeDiagnose', 'ok');
     }
 
@@ -90,6 +105,14 @@ class IncidentController extends Controller
         return view('incidents.carPartIndex', [
             'incidents' => $incidents
         ]);
+    }
+
+    public function autocomplete(Request $request): JsonResponse
+    {
+        $data = CarPart::select("name", "id")
+        ->where('name', 'LIKE', '%'. $request->get('query'). '%')
+        ->get();
+        return response()->json($data);
     }
 
     /**
