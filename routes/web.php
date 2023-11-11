@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::get('incidents/search-car-part', [IncidentController::class, 'searchCarPartIndex'])->name('incidents.searchCarPartIndex');
     Route::get('incidents/purchasedParts', [IncidentController::class, 'incidentsPurchasedParts'])->name('incidents.authorize');
     Route::patch('incidents/authorize/{incident}', [IncidentController::class, 'updateAuthorizedIncident'])->name('incidents.authorizeIncident');
+    Route::get('incidents/repair', [IncidentController::class, 'incidentRepair'])->name('incidents.repair');
+    Route::patch('incidents/repair/{incident}', [IncidentController::class, 'updateRepairIncident'])->name('incidents.repairedIncident');
     Route::get('incidents/requisitions', [IncidentController::class, 'requisitions'])->name('incidents.requisitions');
     Route::get('incidents/search-car-part/{incident}', [IncidentController::class, 'searchCarPartView'])->name('incidents.searchCarPartView');
 

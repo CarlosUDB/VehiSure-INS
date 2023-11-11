@@ -162,6 +162,39 @@ class IncidentController extends Controller
         }
     }
 
+    public function incidentRepair()
+    {
+        $workshops = Workshop::all();
+
+        //checking if the user is from an insurer
+        if (is_null(Auth::user()->insurer_id)) {
+            $incidents = Incident::where('workshop_id', Auth::user()->workshop_id)->where('status', 4)
+                ->select(
+                    'incidents.*'
+                )->get();
+        }
+
+        return view('incidents.repairIndex', [
+            'incidents' => $incidents,
+            'workshops' => $workshops,
+        ]);
+    }
+
+    public function updateRepairIncident($id)
+    {
+        $incident = Incident::find($id);
+
+        if ($incident) {
+            $incident->status = 'fixed';
+            $incident->save();
+
+            session()->flash('completeDiagnose', 'Incidente reparado y finalizado.');
+            return redirect()->back();
+        } else {
+            return response()->json(['error' => 'Error'], 404);
+        }
+    }
+
 
     public function searchCarPartIndex()
     {
