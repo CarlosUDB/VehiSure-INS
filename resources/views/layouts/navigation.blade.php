@@ -23,6 +23,11 @@
                             {{ __('Incidentes') }}
                         </x-nav-link>
                     </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('incidents.authorize')" :active="request()->routeIs('incidents')">
+                            {{ __('Incidentes por autorizar') }}
+                        </x-nav-link>
+                    </div>
                 @endif
 
                 @if (is_null(Auth::user()->insurer_id))

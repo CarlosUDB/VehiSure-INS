@@ -126,6 +126,42 @@ class IncidentController extends Controller
         }
     }
 
+    public function incidentsPurchasedParts()
+    {
+        $workshops = Workshop::all();
+
+        //checking if the user is from an insurer
+        if (!is_null(Auth::user()->insurer_id)) {
+            $incidents = Incident::join('workshops as w', 'w.id', '=', 'incidents.workshop_id')
+                ->join('insurers as i', 'i.id', '=', 'w.insurer_id')
+                ->where('i.id', Auth::user()->insurer_id)
+                ->where('incidents.status', 3)
+                ->select(
+                    'incidents.*'
+                )->get();
+        }
+
+        return view('incidents.authorizeIndex', [
+            'incidents' => $incidents,
+            'workshops' => $workshops,
+        ]);
+    }
+
+    public function updateAuthorizedIncident($id)
+    {
+        $incident = Incident::find($id);
+
+        if ($incident) {
+            $incident->status = 'fixing';
+            $incident->save();
+
+            session()->flash('completeDiagnose', 'Incidente autorizado y listo para reparación');
+            return redirect()->back();
+        } else {
+            return response()->json(['error' => 'Error'], 404);
+        }
+    }
+
 
     public function searchCarPartIndex()
     {
