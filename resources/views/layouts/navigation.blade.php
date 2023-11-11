@@ -37,6 +37,11 @@
                             {{ __('Buscar repuestos') }}
                         </x-nav-link>
                     </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('incidents.requisitions')" :active="request()->routeIs('incidents')">
+                            {{ __('Requisiciones') }}
+                        </x-nav-link>
+                    </div>
                 @endif
 
             </div>

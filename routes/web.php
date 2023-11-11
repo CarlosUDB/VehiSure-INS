@@ -36,11 +36,13 @@ Route::middleware('auth')->group(function () {
     Route::get('autocomplete', [IncidentController::class, 'autocomplete'])->name('autocomplete');
 
     Route::get('incidents/search-car-part', [IncidentController::class, 'searchCarPartIndex'])->name('incidents.searchCarPartIndex');
+    Route::get('incidents/requisitions', [IncidentController::class, 'requisitions'])->name('incidents.requisitions');
     Route::get('incidents/search-car-part/{incident}', [IncidentController::class, 'searchCarPartView'])->name('incidents.searchCarPartView');
 
     Route::resource('incidents', IncidentController::class);
     Route::get('incidents/diagnose/{incident}', [IncidentController::class, 'diagnoseView'])->name('incidents.diagnose');
     Route::post('incidents/diagnose/complete/{incident}', [IncidentController::class, 'completeDiagnose'])->name('incidents.completeDiagnose');
+    Route::post('incidents/requisition/complete/{incident}', [IncidentController::class, 'completeRequisition'])->name('incidents.completeRequisition');
 
 
 

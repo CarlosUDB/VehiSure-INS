@@ -9,6 +9,7 @@ use App\Models\Requisition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class IncidentController extends Controller
 {
@@ -95,6 +96,36 @@ class IncidentController extends Controller
 
         return redirect()->route('incidents.index')->with('completeDiagnose', 'ok');
     }
+
+    public function requisitions()
+    {
+        $requisitions = DB::table('requisitions as r')
+        ->select('i.id','i.date', 'i.police_report_number', 'i.address', 'i.car_plate_number', 'i.status', 'w.name')
+        ->join('incidents as i', 'i.id', '=', 'r.incident_id')
+        ->join('workshops as w', 'w.id', '=', 'i.workshop_id')
+        ->where('w.id', Auth::user()->workshop_id)
+        ->where('i.status', 2)
+        ->get();
+
+        return view('incidents.completeRequisitionIndex', [
+            'requisitions' => $requisitions
+        ]);
+    }
+
+    public function completeRequisition($id)
+    {
+        $incident = Incident::find($id);
+        if ($incident) {
+            $incident->update([
+                'status' => 'purchased_part'
+            ]);
+            session()->flash('completeDiagnose', 'Requisición actualizada');
+            return response()->json(['completeDiagnose' => 'ok']);
+        } else {
+            return response()->json(['completeDiagnose' => 'Error'], 404);
+        }
+    }
+
 
     public function searchCarPartIndex()
     {
